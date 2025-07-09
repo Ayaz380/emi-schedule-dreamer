@@ -1,4 +1,3 @@
-
 export interface AmortizationRow {
   month: number;
   year: number;
@@ -121,4 +120,18 @@ export const calculateAmortizationSchedule = (params: CalculationParams): Amorti
     actualTenure: Math.round((schedule.length / 12) * 10) / 10,
     totalAmountPaid: Math.round(totalPaid)
   };
+};
+
+export const calculateMaxLoanAmount = (maxEmi: number, annualRate: number, tenureYears: number): number => {
+  const monthlyRate = annualRate / (12 * 100);
+  const totalMonths = tenureYears * 12;
+  
+  if (monthlyRate === 0) {
+    return maxEmi * totalMonths;
+  }
+  
+  const maxLoanAmount = (maxEmi * (Math.pow(1 + monthlyRate, totalMonths) - 1)) / 
+                        (monthlyRate * Math.pow(1 + monthlyRate, totalMonths));
+  
+  return Math.round(maxLoanAmount);
 };
