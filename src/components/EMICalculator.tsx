@@ -4,10 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Calculator, TrendingUp, PiggyBank, Calendar, Target } from 'lucide-react';
-import { calculateEMI, calculateAmortizationSchedule, calculateRequiredPrepayment } from '@/utils/emiCalculations';
+import { Calculator, TrendingUp, PiggyBank, Calendar } from 'lucide-react';
+import { calculateEMI, calculateAmortizationSchedule } from '@/utils/emiCalculations';
 import PaymentChart from './PaymentChart';
 import AmortizationTable from './AmortizationTable';
 import SavingsComparison from './SavingsComparison';
@@ -16,7 +15,6 @@ const EMICalculator = () => {
   const [loanAmount, setLoanAmount] = useState<number>(5000000);
   const [interestRate, setInterestRate] = useState<number>(8.5);
   const [tenure, setTenure] = useState<number>(20);
-  const [targetTenure, setTargetTenure] = useState<number>(0);
   const [annualPrepayment, setAnnualPrepayment] = useState<number>(100000);
   const [prepaymentIncrease, setPrepaymentIncrease] = useState<number>(0);
   const [emiIncrease, setEmiIncrease] = useState<number>(0);
@@ -27,7 +25,6 @@ const EMICalculator = () => {
       loanAmount,
       interestRate,
       tenure,
-      targetTenure,
       annualPrepayment,
       prepaymentIncrease,
       emiIncrease
@@ -45,49 +42,21 @@ const EMICalculator = () => {
       emiIncrease: 0
     });
 
-    let withPrepaymentScenario;
-    let requiredPrepayment = 0;
-    
-    if (targetTenure > 0 && targetTenure < tenure) {
-      // Calculate required prepayment to achieve target tenure
-      requiredPrepayment = calculateRequiredPrepayment({
-        loanAmount,
-        interestRate,
-        tenure,
-        targetTenure,
-        annualPrepayment,
-        prepaymentIncrease,
-        emiIncrease
-      });
-      
-      withPrepaymentScenario = calculateAmortizationSchedule({
-        loanAmount,
-        interestRate,
-        tenure,
-        targetTenure,
-        annualPrepayment: requiredPrepayment,
-        prepaymentIncrease,
-        emiIncrease
-      });
-    } else {
-      withPrepaymentScenario = calculateAmortizationSchedule({
-        loanAmount,
-        interestRate,
-        tenure,
-        annualPrepayment,
-        prepaymentIncrease,
-        emiIncrease
-      });
-    }
+    const withPrepaymentScenario = calculateAmortizationSchedule({
+      loanAmount,
+      interestRate,
+      tenure,
+      annualPrepayment,
+      prepaymentIncrease,
+      emiIncrease
+    });
 
     setResults({
       basicEMI,
       standardScenario,
       withPrepaymentScenario,
-      requiredPrepayment,
       totalSavings: standardScenario.totalInterest - withPrepaymentScenario.totalInterest,
-      tenureReduction: standardScenario.actualTenure - withPrepaymentScenario.actualTenure,
-      isTargetMode: targetTenure > 0 && targetTenure < tenure
+      tenureReduction: standardScenario.actualTenure - withPrepaymentScenario.actualTenure
     });
   };
 
@@ -100,7 +69,7 @@ const EMICalculator = () => {
             Home Loan EMI Calculator
           </h1>
           <p className="text-lg text-gray-600">
-            Calculate EMI with prepayment options and target loan closure timeline
+            Calculate EMI with prepayment options and savings analysis
           </p>
         </div>
 
@@ -162,45 +131,13 @@ const EMICalculator = () => {
 
                 <div className="space-y-4">
                   <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                    <Target className="h-4 w-4 text-purple-600" />
-                    Target Loan Closure
-                  </h3>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="targetTenure" className="text-sm font-medium text-gray-700">
-                      Target Years to Close Loan (0 = No Target)
-                    </Label>
-                    <Input
-                      id="targetTenure"
-                      type="number"
-                      value={targetTenure}
-                      onChange={(e) => setTargetTenure(Number(e.target.value))}
-                      className="border-gray-300 focus:border-purple-500"
-                      placeholder="15"
-                      max={tenure - 1}
-                    />
-                    {targetTenure > 0 && targetTenure < tenure && (
-                      <p className="text-xs text-purple-600">
-                        Calculator will show required prepayment to achieve this target
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <Separator className="my-4" />
-
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-blue-600" />
                     Prepayment Options
                   </h3>
                   
                   <div className="space-y-2">
                     <Label htmlFor="annualPrepayment" className="text-sm font-medium text-gray-700">
-                      {targetTenure > 0 && targetTenure < tenure 
-                        ? "Base Prepayment Amount (₹)" 
-                        : "Lumpsum Pre-Payment Every Year (₹)"
-                      }
+                      Lumpsum Pre-Payment Every Year (₹)
                     </Label>
                     <Input
                       id="annualPrepayment"
@@ -209,7 +146,6 @@ const EMICalculator = () => {
                       onChange={(e) => setAnnualPrepayment(Number(e.target.value))}
                       className="border-gray-300 focus:border-green-500"
                       placeholder="1,00,000"
-                      disabled={targetTenure > 0 && targetTenure < tenure}
                     />
                   </div>
 
@@ -272,34 +208,16 @@ const EMICalculator = () => {
                     </CardContent>
                   </Card>
 
-                  {results.isTargetMode ? (
-                    <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-50 to-violet-100">
-                      <CardContent className="p-6">
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-purple-700 mb-2">
-                            ₹{results.requiredPrepayment.toLocaleString('en-IN')}
-                          </div>
-                          <div className="text-sm text-purple-600 font-medium">
-                            Required Annual Prepayment
-                          </div>
-                          <Badge variant="secondary" className="mt-2 bg-purple-100 text-purple-700">
-                            To close in {targetTenure} years
-                          </Badge>
+                  <Card className="shadow-lg border-0 bg-gradient-to-br from-orange-50 to-amber-100">
+                    <CardContent className="p-6">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-orange-700 mb-2">
+                          ₹{results.totalSavings.toLocaleString('en-IN')}
                         </div>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <Card className="shadow-lg border-0 bg-gradient-to-br from-orange-50 to-amber-100">
-                      <CardContent className="p-6">
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-orange-700 mb-2">
-                            ₹{results.totalSavings.toLocaleString('en-IN')}
-                          </div>
-                          <div className="text-sm text-orange-600 font-medium">Total Interest Saved</div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
+                        <div className="text-sm text-orange-600 font-medium">Total Interest Saved</div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Savings Comparison */}
@@ -329,7 +247,7 @@ const EMICalculator = () => {
                     Ready to Calculate
                   </h3>
                   <p className="text-gray-600">
-                    Enter your loan details and optionally set a target closure timeline to see your EMI breakdown and required prepayments.
+                    Enter your loan details and prepayment options to see your EMI breakdown and savings analysis.
                   </p>
                 </CardContent>
               </Card>
