@@ -26,6 +26,7 @@ export interface CalculationParams {
   annualPrepayment: number;
   prepaymentIncrease: number;
   emiIncrease: number;
+  targetTenure?: number;
 }
 
 export const calculateEMI = (principal: number, annualRate: number, tenureYears: number): number => {
@@ -40,6 +41,44 @@ export const calculateEMI = (principal: number, annualRate: number, tenureYears:
               (Math.pow(1 + monthlyRate, totalMonths) - 1);
   
   return Math.round(emi);
+};
+
+export const calculateRequiredPrepayment = (params: CalculationParams): number => {
+  const { loanAmount, interestRate, tenure, targetTenure, emiIncrease } = params;
+  
+  if (!targetTenure || targetTenure >= tenure) {
+    return 0;
+  }
+
+  const monthlyRate = interestRate / (12 * 100);
+  let baseEMI = calculateEMI(loanAmount, interestRate, tenure);
+  let currentEMI = baseEMI;
+  let balance = loanAmount;
+  let month = 1;
+  let requiredPrepayment = 0;
+
+  // Binary search to find required prepayment
+  let low = 0;
+  let high = loanAmount / targetTenure; // Upper bound
+  let tolerance = 1000; // ₹1000 tolerance
+
+  while (high - low > tolerance) {
+    const midPrepayment = (low + high) / 2;
+    
+    const testResult = calculateAmortizationSchedule({
+      ...params,
+      annualPrepayment: midPrepayment,
+      prepaymentIncrease: 0
+    });
+
+    if (testResult.actualTenure > targetTenure) {
+      low = midPrepayment;
+    } else {
+      high = midPrepayment;
+    }
+  }
+
+  return Math.round((low + high) / 2);
 };
 
 export const calculateAmortizationSchedule = (params: CalculationParams): AmortizationResult => {
