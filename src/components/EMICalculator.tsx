@@ -1,16 +1,16 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Calculator, TrendingUp, PiggyBank, Calendar, IndianRupee } from 'lucide-react';
+import { Calculator, TrendingUp, PiggyBank, Calendar, IndianRupee, Home } from 'lucide-react';
 import { calculateEMI, calculateAmortizationSchedule } from '@/utils/emiCalculations';
 import PaymentChart from './PaymentChart';
 import AmortizationTable from './AmortizationTable';
 import SavingsComparison from './SavingsComparison';
 import EligibilityCalculator from './EligibilityCalculator';
+import AffordabilityCalculator from './AffordabilityCalculator';
 
 const EMICalculator = () => {
   const [loanAmount, setLoanAmount] = useState<number>(5000000);
@@ -20,7 +20,7 @@ const EMICalculator = () => {
   const [prepaymentIncrease, setPrepaymentIncrease] = useState<number>(0);
   const [emiIncrease, setEmiIncrease] = useState<number>(0);
   const [results, setResults] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'eligibility' | 'calculator'>('eligibility');
+  const [activeTab, setActiveTab] = useState<'affordability' | 'eligibility' | 'calculator'>('affordability');
 
   const handleCalculate = () => {
     console.log('Calculating EMI with parameters:', {
@@ -67,6 +67,11 @@ const EMICalculator = () => {
     setActiveTab('calculator');
   };
 
+  const handleAffordabilityResult = (affordableAmount: number) => {
+    setLoanAmount(affordableAmount * 0.8); // Assuming 80% loan, 20% down payment
+    setActiveTab('calculator');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
@@ -76,13 +81,21 @@ const EMICalculator = () => {
             Home Loan EMI Calculator
           </h1>
           <p className="text-lg text-gray-600">
-            Check your eligibility and calculate EMI with prepayment options
+            Check affordability, eligibility and calculate EMI with prepayment options
           </p>
         </div>
 
         {/* Tab Navigation */}
         <div className="flex justify-center mb-6">
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-1 shadow-lg">
+            <Button
+              variant={activeTab === 'affordability' ? 'default' : 'ghost'}
+              onClick={() => setActiveTab('affordability')}
+              className="flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              Affordability
+            </Button>
             <Button
               variant={activeTab === 'eligibility' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('eligibility')}
@@ -102,7 +115,9 @@ const EMICalculator = () => {
           </div>
         </div>
 
-        {activeTab === 'eligibility' ? (
+        {activeTab === 'affordability' ? (
+          <AffordabilityCalculator onAffordabilityResult={handleAffordabilityResult} />
+        ) : activeTab === 'eligibility' ? (
           <EligibilityCalculator onEligibilityResult={handleEligibilityResult} />
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
