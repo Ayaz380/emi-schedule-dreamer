@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -73,7 +72,7 @@ const Contact = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Contact Form */}
+          {/* Google Form Integration */}
           <div className="lg:col-span-2">
             <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
@@ -85,88 +84,31 @@ const Contact = () => {
                 </p>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="Enter your full name"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        placeholder="Enter your phone number"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      placeholder="Enter your email address"
-                      required
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="loanAmount">Loan Amount Required</Label>
-                      <Input
-                        id="loanAmount"
-                        value={formData.loanAmount}
-                        onChange={(e) => setFormData({...formData, loanAmount: e.target.value})}
-                        placeholder="e.g., 50,00,000"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="loanType">Loan Type</Label>
-                      <Select onValueChange={(value) => setFormData({...formData, loanType: value})}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select loan type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="home-purchase">Home Purchase</SelectItem>
-                          <SelectItem value="home-construction">Home Construction</SelectItem>
-                          <SelectItem value="home-improvement">Home Improvement</SelectItem>
-                          <SelectItem value="balance-transfer">Balance Transfer</SelectItem>
-                          <SelectItem value="loan-against-property">Loan Against Property</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message (Optional)</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      placeholder="Tell us about your specific requirements..."
-                      rows={4}
-                    />
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 text-lg"
+                <div className="w-full h-[600px] rounded-lg overflow-hidden">
+                  <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSf_EXAMPLE_FORM_ID/viewform?embedded=true"
+                    width="100%"
+                    height="600"
+                    frameBorder="0"
+                    marginHeight={0}
+                    marginWidth={0}
+                    title="Home Loan Callback Request Form"
+                    className="rounded-lg"
                   >
-                    Request Callback
-                  </Button>
-                </form>
+                    Loading…
+                  </iframe>
+                </div>
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Note:</strong> To integrate your own Google Form:
+                  </p>
+                  <ol className="text-sm text-blue-700 mt-2 list-decimal list-inside space-y-1">
+                    <li>Create a Google Form with fields for Name, Phone, Email, Loan Amount, Loan Type, and Message</li>
+                    <li>Click "Send" → "Embed HTML" → Copy the iframe src URL</li>
+                    <li>Replace the example URL above with your Google Form's embed URL</li>
+                    <li>Add "?embedded=true" to the end of your form URL</li>
+                  </ol>
+                </div>
               </CardContent>
             </Card>
           </div>
