@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Phone, Mail, MapPin, Clock, MessageCircle, Calculator, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import GoogleMap from '@/components/GoogleMap';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -29,19 +30,19 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Phone Support",
-      details: ["1800-123-4567 (Toll Free)", "+91-22-1234-5678"],
+      details: ["+91-9764646403"],
       hours: "Mon-Sat: 9 AM - 8 PM"
     },
     {
       icon: Mail,
       title: "Email Support",
-      details: ["info@homeloanpro.com", "support@homeloanpro.com"],
+      details: ["ayazshaikh380@gmail.com"],
       hours: "24/7 Support"
     },
     {
       icon: MapPin,
       title: "Head Office",
-      details: ["123 Business District", "Mumbai, Maharashtra 400001"],
+      details: ["105, Konark Puram Business Hub", "Kondhwa, Pune 411048"],
       hours: "Mon-Fri: 9 AM - 6 PM"
     },
     {
@@ -53,11 +54,11 @@ const Contact = () => {
   ];
 
   const branches = [
-    { city: "Mumbai", address: "123 Business District, Andheri (E)", phone: "+91-22-1234-5678" },
-    { city: "Delhi", address: "456 Central Plaza, Connaught Place", phone: "+91-11-2345-6789" },
-    { city: "Bangalore", address: "789 Tech Park, Whitefield", phone: "+91-80-3456-7890" },
-    { city: "Chennai", address: "321 Marina Beach Road, T.Nagar", phone: "+91-44-4567-8901" },
-    { city: "Pune", address: "654 IT Hub, Hinjewadi", phone: "+91-20-5678-9012" },
+    { city: "Pune", address: "105, Konark Puram Business Hub, Kondhwa", phone: "+91-9764646403" },
+    { city: "Mumbai", address: "456 Central Plaza, Andheri (E)", phone: "+91-22-1234-5678" },
+    { city: "Delhi", address: "789 Business Center, Connaught Place", phone: "+91-11-2345-6789" },
+    { city: "Bangalore", address: "321 Tech Park, Whitefield", phone: "+91-80-3456-7890" },
+    { city: "Chennai", address: "654 Marina Beach Road, T.Nagar", phone: "+91-44-4567-8901" },
     { city: "Hyderabad", address: "987 HITEC City, Madhapur", phone: "+91-40-6789-0123" }
   ];
 
@@ -195,6 +196,21 @@ const Contact = () => {
             })}
           </div>
         </div>
+
+        {/* Office Location Map */}
+        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm mb-12">
+          <CardHeader>
+            <CardTitle className="text-2xl font-semibold text-gray-900 text-center">
+              Visit Our Office
+            </CardTitle>
+            <p className="text-gray-600 text-center">
+              105, Konark Puram Business Hub, Kondhwa, Pune 411048
+            </p>
+          </CardHeader>
+          <CardContent>
+            <GoogleMap />
+          </CardContent>
+        </Card>
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
