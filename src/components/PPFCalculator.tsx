@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Shield, Calculator, TrendingUp } from 'lucide-react';
+import { numberToWords } from '@/utils/numberToWords';
 
 const PPFCalculator = () => {
   const [yearlyInvestment, setYearlyInvestment] = useState<number>(150000);
@@ -60,31 +62,56 @@ const PPFCalculator = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="yearlyInvestment">Yearly Investment (₹500 - ₹1.5L)</Label>
-              <Input
-                id="yearlyInvestment"
-                type="number"
-                value={yearlyInvestment}
-                onChange={(e) => setYearlyInvestment(Number(e.target.value))}
-                min={500}
-                max={150000}
-                placeholder="1,50,000"
-              />
-              <div className="text-xs text-gray-500">
-                Maximum ₹1.5 lakh per year for tax benefit under Section 80C
+              <div className="space-y-2">
+                <Slider
+                  value={[yearlyInvestment]}
+                  onValueChange={(value) => setYearlyInvestment(value[0])}
+                  min={500}
+                  max={150000}
+                  step={500}
+                  className="w-full"
+                />
+                <Input
+                  id="yearlyInvestment"
+                  type="number"
+                  value={yearlyInvestment}
+                  onChange={(e) => setYearlyInvestment(Number(e.target.value))}
+                  min={500}
+                  max={150000}
+                  placeholder="1,50,000"
+                />
+                <div className="text-xs text-gray-500">
+                  Maximum ₹1.5 lakh per year for tax benefit under Section 80C
+                </div>
+                <p className="text-xs text-gray-500">
+                  {numberToWords(yearlyInvestment)} Rupees
+                </p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="currentAge">Current Age</Label>
-              <Input
-                id="currentAge"
-                type="number"
-                value={currentAge}
-                onChange={(e) => setCurrentAge(Number(e.target.value))}
-                placeholder="30"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="currentAge">Current Age (18 - 60 years)</Label>
+              <div className="space-y-2">
+                <Slider
+                  value={[currentAge]}
+                  onValueChange={(value) => setCurrentAge(value[0])}
+                  min={18}
+                  max={60}
+                  step={1}
+                  className="w-full"
+                />
+                <Input
+                  id="currentAge"
+                  type="number"
+                  value={currentAge}
+                  onChange={(e) => setCurrentAge(Number(e.target.value))}
+                  placeholder="30"
+                  min={18}
+                  max={60}
+                />
+              </div>
             </div>
 
             <div className="bg-blue-50 p-4 rounded-lg">
@@ -118,12 +145,18 @@ const PPFCalculator = () => {
                     ₹{results.totalInvestment.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Total Investment</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.totalInvestment)} Rupees
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-white/60 rounded-lg">
                   <div className="text-xl font-bold text-blue-700">
                     ₹{results.maturityAmount.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Maturity Amount</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.maturityAmount)} Rupees
+                  </div>
                 </div>
               </div>
               
@@ -133,12 +166,18 @@ const PPFCalculator = () => {
                     ₹{results.interestEarned.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Interest Earned</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.interestEarned)} Rupees
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-white/60 rounded-lg">
                   <div className="text-xl font-bold text-orange-700">
                     ₹{results.taxSaved.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Tax Saved</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.taxSaved)} Rupees
+                  </div>
                 </div>
               </div>
 

@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PiggyBank, Calculator } from 'lucide-react';
+import { numberToWords } from '@/utils/numberToWords';
 
 const FDCalculator = () => {
   const [principal, setPrincipal] = useState<number>(100000);
@@ -58,38 +60,77 @@ const FDCalculator = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="principal">Principal Amount (₹)</Label>
-              <Input
-                id="principal"
-                type="number"
-                value={principal}
-                onChange={(e) => setPrincipal(Number(e.target.value))}
-                placeholder="1,00,000"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="principal">Principal Amount (₹10K - ₹1Cr)</Label>
+              <div className="space-y-2">
+                <Slider
+                  value={[principal]}
+                  onValueChange={(value) => setPrincipal(value[0])}
+                  min={10000}
+                  max={10000000}
+                  step={10000}
+                  className="w-full"
+                />
+                <Input
+                  id="principal"
+                  type="number"
+                  value={principal}
+                  onChange={(e) => setPrincipal(Number(e.target.value))}
+                  placeholder="1,00,000"
+                  min={10000}
+                  max={10000000}
+                />
+                <p className="text-xs text-gray-500">
+                  {numberToWords(principal)} Rupees
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="interestRate">Interest Rate (% p.a.)</Label>
-              <Input
-                id="interestRate"
-                type="number"
-                step="0.1"
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
-                placeholder="7.5"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="interestRate">Interest Rate (3% - 12% p.a.)</Label>
+              <div className="space-y-2">
+                <Slider
+                  value={[interestRate]}
+                  onValueChange={(value) => setInterestRate(value[0])}
+                  min={3}
+                  max={12}
+                  step={0.1}
+                  className="w-full"
+                />
+                <Input
+                  id="interestRate"
+                  type="number"
+                  step="0.1"
+                  value={interestRate}
+                  onChange={(e) => setInterestRate(Number(e.target.value))}
+                  placeholder="7.5"
+                  min={3}
+                  max={12}
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="tenure">Tenure (Years)</Label>
-              <Input
-                id="tenure"
-                type="number"
-                value={tenure}
-                onChange={(e) => setTenure(Number(e.target.value))}
-                placeholder="5"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="tenure">Tenure (1 - 10 Years)</Label>
+              <div className="space-y-2">
+                <Slider
+                  value={[tenure]}
+                  onValueChange={(value) => setTenure(value[0])}
+                  min={1}
+                  max={10}
+                  step={1}
+                  className="w-full"
+                />
+                <Input
+                  id="tenure"
+                  type="number"
+                  value={tenure}
+                  onChange={(e) => setTenure(Number(e.target.value))}
+                  placeholder="5"
+                  min={1}
+                  max={10}
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -125,12 +166,18 @@ const FDCalculator = () => {
                     ₹{results.principal.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Principal Amount</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.principal)} Rupees
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-white/60 rounded-lg">
                   <div className="text-2xl font-bold text-green-700">
                     ₹{results.maturityAmount.toLocaleString('en-IN')}
                   </div>
                   <div className="text-sm text-gray-600">Maturity Amount</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {numberToWords(results.maturityAmount)} Rupees
+                  </div>
                 </div>
               </div>
               
@@ -139,6 +186,9 @@ const FDCalculator = () => {
                   ₹{results.interestEarned.toLocaleString('en-IN')}
                 </div>
                 <div className="text-sm text-gray-600">Interest Earned</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {numberToWords(results.interestEarned)} Rupees
+                </div>
               </div>
 
               <div className="text-center text-sm text-gray-600">

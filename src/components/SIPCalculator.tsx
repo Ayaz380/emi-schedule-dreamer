@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { TrendingUp, PiggyBank, Calculator } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { numberToWords } from '@/utils/numberToWords';
 
 const SIPCalculator = () => {
   const [monthlyInvestment, setMonthlyInvestment] = useState<number>(10000);
@@ -69,47 +71,86 @@ const SIPCalculator = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="monthlyInvestment" className="text-sm font-medium text-gray-700">
-                    Monthly Investment (₹)
+                    Monthly Investment (₹500 - ₹1,00,000)
                   </Label>
-                  <Input
-                    id="monthlyInvestment"
-                    type="number"
-                    value={monthlyInvestment}
-                    onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                    className="text-lg font-medium"
-                    placeholder="10,000"
-                  />
+                  <div className="space-y-2">
+                    <Slider
+                      value={[monthlyInvestment]}
+                      onValueChange={(value) => setMonthlyInvestment(value[0])}
+                      min={500}
+                      max={100000}
+                      step={500}
+                      className="w-full"
+                    />
+                    <Input
+                      id="monthlyInvestment"
+                      type="number"
+                      value={monthlyInvestment}
+                      onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
+                      className="text-lg font-medium"
+                      placeholder="10,000"
+                      min={500}
+                      max={100000}
+                    />
+                    <p className="text-xs text-gray-500">
+                      {numberToWords(monthlyInvestment)} Rupees
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="expectedReturn" className="text-sm font-medium text-gray-700">
-                    Expected Annual Return (%)
+                    Expected Annual Return (8% - 25%)
                   </Label>
-                  <Input
-                    id="expectedReturn"
-                    type="number"
-                    step="0.1"
-                    value={expectedReturn}
-                    onChange={(e) => setExpectedReturn(Number(e.target.value))}
-                    className="text-lg font-medium"
-                    placeholder="12"
-                  />
+                  <div className="space-y-2">
+                    <Slider
+                      value={[expectedReturn]}
+                      onValueChange={(value) => setExpectedReturn(value[0])}
+                      min={8}
+                      max={25}
+                      step={0.5}
+                      className="w-full"
+                    />
+                    <Input
+                      id="expectedReturn"
+                      type="number"
+                      step="0.1"
+                      value={expectedReturn}
+                      onChange={(e) => setExpectedReturn(Number(e.target.value))}
+                      className="text-lg font-medium"
+                      placeholder="12"
+                      min={8}
+                      max={25}
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="investmentPeriod" className="text-sm font-medium text-gray-700">
-                    Investment Period (Years)
+                    Investment Period (1 - 40 Years)
                   </Label>
-                  <Input
-                    id="investmentPeriod"
-                    type="number"
-                    value={investmentPeriod}
-                    onChange={(e) => setInvestmentPeriod(Number(e.target.value))}
-                    className="text-lg font-medium"
-                    placeholder="10"
-                  />
+                  <div className="space-y-2">
+                    <Slider
+                      value={[investmentPeriod]}
+                      onValueChange={(value) => setInvestmentPeriod(value[0])}
+                      min={1}
+                      max={40}
+                      step={1}
+                      className="w-full"
+                    />
+                    <Input
+                      id="investmentPeriod"
+                      type="number"
+                      value={investmentPeriod}
+                      onChange={(e) => setInvestmentPeriod(Number(e.target.value))}
+                      className="text-lg font-medium"
+                      placeholder="10"
+                      min={1}
+                      max={40}
+                    />
+                  </div>
                 </div>
 
                 <Button 
@@ -135,6 +176,9 @@ const SIPCalculator = () => {
                         ₹{results.totalInvestment.toLocaleString('en-IN')}
                       </div>
                       <div className="text-sm text-blue-600 font-medium">Total Investment</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {numberToWords(results.totalInvestment)} Rupees
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -144,6 +188,9 @@ const SIPCalculator = () => {
                         ₹{results.futureValue.toLocaleString('en-IN')}
                       </div>
                       <div className="text-sm text-green-600 font-medium">Maturity Value</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {numberToWords(results.futureValue)} Rupees
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -153,6 +200,9 @@ const SIPCalculator = () => {
                         ₹{results.totalReturns.toLocaleString('en-IN')}
                       </div>
                       <div className="text-sm text-purple-600 font-medium">Total Returns</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {numberToWords(results.totalReturns)} Rupees
+                      </div>
                     </CardContent>
                   </Card>
                 </div>

@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Receipt, Calculator, PiggyBank } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { numberToWords } from '@/utils/numberToWords';
 
 const TaxCalculator = () => {
   const [annualIncome, setAnnualIncome] = useState<number>(1200000);
@@ -91,18 +93,33 @@ const TaxCalculator = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="annualIncome" className="text-sm font-medium text-gray-700">
-                    Annual Income (₹)
+                    Annual Income (₹2L - ₹1Cr)
                   </Label>
-                  <Input
-                    id="annualIncome"
-                    type="number"
-                    value={annualIncome}
-                    onChange={(e) => setAnnualIncome(Number(e.target.value))}
-                    className="text-lg font-medium"
-                    placeholder="12,00,000"
-                  />
+                  <div className="space-y-2">
+                    <Slider
+                      value={[annualIncome]}
+                      onValueChange={(value) => setAnnualIncome(value[0])}
+                      min={200000}
+                      max={10000000}
+                      step={50000}
+                      className="w-full"
+                    />
+                    <Input
+                      id="annualIncome"
+                      type="number"
+                      value={annualIncome}
+                      onChange={(e) => setAnnualIncome(Number(e.target.value))}
+                      className="text-lg font-medium"
+                      placeholder="12,00,000"
+                      min={200000}
+                      max={10000000}
+                    />
+                    <p className="text-xs text-gray-500">
+                      {numberToWords(annualIncome)} Rupees
+                    </p>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -121,21 +138,36 @@ const TaxCalculator = () => {
                 </div>
 
                 {taxRegime === 'old' && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label htmlFor="deductions" className="text-sm font-medium text-gray-700">
-                      Total Deductions (₹)
+                      Total Deductions (₹0 - ₹1.5L)
                     </Label>
-                    <Input
-                      id="deductions"
-                      type="number"
-                      value={deductions}
-                      onChange={(e) => setDeductions(Number(e.target.value))}
-                      className="text-lg font-medium"
-                      placeholder="1,50,000"
-                    />
-                    <p className="text-xs text-gray-500">
-                      Include 80C, 80D, Standard Deduction etc. (Max: ₹1,50,000)
-                    </p>
+                    <div className="space-y-2">
+                      <Slider
+                        value={[deductions]}
+                        onValueChange={(value) => setDeductions(value[0])}
+                        min={0}
+                        max={150000}
+                        step={5000}
+                        className="w-full"
+                      />
+                      <Input
+                        id="deductions"
+                        type="number"
+                        value={deductions}
+                        onChange={(e) => setDeductions(Number(e.target.value))}
+                        className="text-lg font-medium"
+                        placeholder="1,50,000"
+                        min={0}
+                        max={150000}
+                      />
+                      <p className="text-xs text-gray-500">
+                        Include 80C, 80D, Standard Deduction etc. (Max: ₹1,50,000)
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {numberToWords(deductions)} Rupees
+                      </p>
+                    </div>
                   </div>
                 )}
 
@@ -162,6 +194,9 @@ const TaxCalculator = () => {
                         ₹{results.netIncome.toLocaleString('en-IN')}
                       </div>
                       <div className="text-sm text-green-600 font-medium">Net Annual Income</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {numberToWords(results.netIncome)} Rupees
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -171,6 +206,9 @@ const TaxCalculator = () => {
                         ₹{results.totalTax.toLocaleString('en-IN')}
                       </div>
                       <div className="text-sm text-red-600 font-medium">Total Tax Liability</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {numberToWords(results.totalTax)} Rupees
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
