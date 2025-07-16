@@ -2,11 +2,14 @@
 import React, { useState } from 'react';
 import { Calculator } from 'lucide-react';
 import { calculateEMI, calculateAmortizationSchedule } from '@/utils/emiCalculations';
-import TabNavigation from './TabNavigation';
+import EnhancedTabNavigation from './EnhancedTabNavigation';
 import LoanParametersForm from './LoanParametersForm';
 import EMIResults from './EMIResults';
 import EligibilityCalculator from './EligibilityCalculator';
 import AffordabilityCalculator from './AffordabilityCalculator';
+import SIPCalculator from './SIPCalculator';
+import TaxCalculator from './TaxCalculator';
+import PropertyCalculator from './PropertyCalculator';
 
 const EMICalculator = () => {
   const [loanAmount, setLoanAmount] = useState<number>(5000000);
@@ -16,7 +19,7 @@ const EMICalculator = () => {
   const [prepaymentIncrease, setPrepaymentIncrease] = useState<number>(0);
   const [emiIncrease, setEmiIncrease] = useState<number>(0);
   const [results, setResults] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'affordability' | 'eligibility' | 'calculator'>('affordability');
+  const [activeTab, setActiveTab] = useState<'affordability' | 'eligibility' | 'calculator' | 'sip' | 'tax' | 'property'>('affordability');
 
   const handleCalculate = () => {
     console.log('Calculating EMI with parameters:', {
@@ -68,20 +71,32 @@ const EMICalculator = () => {
     setActiveTab('calculator');
   };
 
+  if (activeTab === 'sip') {
+    return <SIPCalculator />;
+  }
+
+  if (activeTab === 'tax') {
+    return <TaxCalculator />;
+  }
+
+  if (activeTab === 'property') {
+    return <PropertyCalculator />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
             <Calculator className="h-10 w-10 text-blue-600" />
-            Home Loan EMI Calculator
+            Financial Calculators Suite
           </h1>
           <p className="text-lg text-gray-600">
-            Check affordability, eligibility and calculate EMI with prepayment options
+            Comprehensive financial planning tools for all your needs
           </p>
         </div>
 
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        <EnhancedTabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
         {activeTab === 'affordability' ? (
           <AffordabilityCalculator onAffordabilityResult={handleAffordabilityResult} />
