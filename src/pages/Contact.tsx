@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -86,7 +87,7 @@ const Contact = () => {
               <CardContent>
                 <div className="w-full h-[600px] rounded-lg overflow-hidden">
                   <iframe
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSf_EXAMPLE_FORM_ID/viewform?embedded=true"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSfhA9o2VGDn04w_50R9Q5B2cdDhDCzvcpNVH7tTqIOByyz6Dw/viewform?embedded=true"
                     width="100%"
                     height="600"
                     frameBorder="0"
@@ -97,17 +98,6 @@ const Contact = () => {
                   >
                     Loading…
                   </iframe>
-                </div>
-                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    <strong>Note:</strong> To integrate your own Google Form:
-                  </p>
-                  <ol className="text-sm text-blue-700 mt-2 list-decimal list-inside space-y-1">
-                    <li>Create a Google Form with fields for Name, Phone, Email, Loan Amount, Loan Type, and Message</li>
-                    <li>Click "Send" → "Embed HTML" → Copy the iframe src URL</li>
-                    <li>Replace the example URL above with your Google Form's embed URL</li>
-                    <li>Add "?embedded=true" to the end of your form URL</li>
-                  </ol>
                 </div>
               </CardContent>
             </Card>
