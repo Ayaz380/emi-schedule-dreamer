@@ -4,19 +4,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { IndianRupee, Calculator, TrendingUp, CheckCircle, Home } from 'lucide-react';
 import { calculateEMI, calculateMaxLoanAmount } from '@/utils/emiCalculations';
+import { numberToWords } from '@/utils/numberToWords';
 
 interface EligibilityCalculatorProps {
   onEligibilityResult: (eligibleAmount: number) => void;
 }
 
 const EligibilityCalculator: React.FC<EligibilityCalculatorProps> = ({ onEligibilityResult }) => {
-  const [monthlySalary, setMonthlySalary] = useState<number>(100000);
-  const [interestRate, setInterestRate] = useState<number>(8.5);
-  const [tenure, setTenure] = useState<number>(20);
+  const [monthlySalary, setMonthlySalary] = useState<number>(0);
+  const [interestRate, setInterestRate] = useState<number>(0);
+  const [tenure, setTenure] = useState<number>(0);
   const [existingEmi, setExistingEmi] = useState<number>(0);
-  const [ownContribution, setOwnContribution] = useState<number>(1000000);
+  const [ownContribution, setOwnContribution] = useState<number>(0);
   const [eligibilityResult, setEligibilityResult] = useState<any>(null);
 
   const handleCalculateEligibility = () => {
@@ -66,29 +68,45 @@ const EligibilityCalculator: React.FC<EligibilityCalculatorProps> = ({ onEligibi
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="monthlySalary" className="text-sm font-medium text-gray-700">
-                Monthly Salary (₹)
+                Monthly Salary (₹): {monthlySalary > 0 && numberToWords(monthlySalary)}
               </Label>
+              <Slider
+                value={[monthlySalary]}
+                onValueChange={(value) => setMonthlySalary(value[0])}
+                max={500000}
+                min={0}
+                step={1000}
+                className="w-full"
+              />
               <Input
                 id="monthlySalary"
                 type="number"
                 value={monthlySalary}
                 onChange={(e) => setMonthlySalary(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="1,00,000"
+                placeholder="Enter monthly salary"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="ownContribution" className="text-sm font-medium text-gray-700">
-                Own Contribution / Down Payment (₹)
+                Own Contribution / Down Payment (₹): {ownContribution > 0 && numberToWords(ownContribution)}
               </Label>
+              <Slider
+                value={[ownContribution]}
+                onValueChange={(value) => setOwnContribution(value[0])}
+                max={5000000}
+                min={0}
+                step={50000}
+                className="w-full"
+              />
               <Input
                 id="ownContribution"
                 type="number"
                 value={ownContribution}
                 onChange={(e) => setOwnContribution(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-green-500"
-                placeholder="10,00,000"
+                placeholder="Enter down payment amount"
               />
               <p className="text-xs text-gray-500">
                 Cash available for down payment
@@ -97,8 +115,16 @@ const EligibilityCalculator: React.FC<EligibilityCalculatorProps> = ({ onEligibi
 
             <div className="space-y-2">
               <Label htmlFor="eligibilityInterestRate" className="text-sm font-medium text-gray-700">
-                Expected Interest Rate (% p.a.)
+                Expected Interest Rate (% p.a.): {interestRate}%
               </Label>
+              <Slider
+                value={[interestRate]}
+                onValueChange={(value) => setInterestRate(value[0])}
+                max={18}
+                min={6}
+                step={0.1}
+                className="w-full"
+              />
               <Input
                 id="eligibilityInterestRate"
                 type="number"
@@ -106,35 +132,51 @@ const EligibilityCalculator: React.FC<EligibilityCalculatorProps> = ({ onEligibi
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="8.5"
+                placeholder="Enter interest rate"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="eligibilityTenure" className="text-sm font-medium text-gray-700">
-                Desired Loan Tenure (Years)
+                Desired Loan Tenure (Years): {tenure} years
               </Label>
+              <Slider
+                value={[tenure]}
+                onValueChange={(value) => setTenure(value[0])}
+                max={30}
+                min={5}
+                step={1}
+                className="w-full"
+              />
               <Input
                 id="eligibilityTenure"
                 type="number"
                 value={tenure}
                 onChange={(e) => setTenure(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="20"
+                placeholder="Enter loan tenure"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="existingEmi" className="text-sm font-medium text-gray-700">
-                Existing EMIs (₹)
+                Existing EMIs (₹): {existingEmi > 0 && numberToWords(existingEmi)}
               </Label>
+              <Slider
+                value={[existingEmi]}
+                onValueChange={(value) => setExistingEmi(value[0])}
+                max={50000}
+                min={0}
+                step={500}
+                className="w-full"
+              />
               <Input
                 id="existingEmi"
                 type="number"
                 value={existingEmi}
                 onChange={(e) => setExistingEmi(Number(e.target.value))}
                 className="border-gray-300 focus:border-red-500"
-                placeholder="0"
+                placeholder="Enter existing EMI amount"
               />
               <p className="text-xs text-gray-500">
                 Any existing loan EMIs (car loan, personal loan, etc.)

@@ -16,10 +16,10 @@ import InsuranceCalculator from './InsuranceCalculator';
 import LoanComparison from './LoanComparison';
 
 const EMICalculator = () => {
-  const [loanAmount, setLoanAmount] = useState<number>(5000000);
-  const [interestRate, setInterestRate] = useState<number>(8.5);
-  const [tenure, setTenure] = useState<number>(20);
-  const [annualPrepayment, setAnnualPrepayment] = useState<number>(100000);
+  const [loanAmount, setLoanAmount] = useState<number>(0);
+  const [interestRate, setInterestRate] = useState<number>(0);
+  const [tenure, setTenure] = useState<number>(0);
+  const [annualPrepayment, setAnnualPrepayment] = useState<number>(0);
   const [prepaymentIncrease, setPrepaymentIncrease] = useState<number>(0);
   const [emiIncrease, setEmiIncrease] = useState<number>(0);
   const [results, setResults] = useState<any>(null);

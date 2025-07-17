@@ -4,19 +4,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Home, Calculator, TrendingUp, Wallet, PiggyBank } from 'lucide-react';
+import { numberToWords } from '@/utils/numberToWords';
 
 interface AffordabilityCalculatorProps {
   onAffordabilityResult: (affordableAmount: number) => void;
 }
 
 const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAffordabilityResult }) => {
-  const [monthlyIncome, setMonthlyIncome] = useState<number>(150000);
-  const [monthlyExpenses, setMonthlyExpenses] = useState<number>(50000);
+  const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
+  const [monthlyExpenses, setMonthlyExpenses] = useState<number>(0);
   const [existingEmi, setExistingEmi] = useState<number>(0);
-  const [downPaymentRatio, setDownPaymentRatio] = useState<number>(20);
-  const [interestRate, setInterestRate] = useState<number>(8.5);
-  const [tenure, setTenure] = useState<number>(20);
+  const [downPaymentRatio, setDownPaymentRatio] = useState<number>(0);
+  const [interestRate, setInterestRate] = useState<number>(0);
+  const [tenure, setTenure] = useState<number>(0);
   const [result, setResult] = useState<any>(null);
 
   const handleCalculateAffordability = () => {
@@ -87,29 +89,45 @@ const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAff
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="monthlyIncome" className="text-sm font-medium text-gray-700">
-                Monthly Income (₹)
+                Monthly Income (₹): {monthlyIncome > 0 && numberToWords(monthlyIncome)}
               </Label>
+              <Slider
+                value={[monthlyIncome]}
+                onValueChange={(value) => setMonthlyIncome(value[0])}
+                max={500000}
+                min={0}
+                step={1000}
+                className="w-full"
+              />
               <Input
                 id="monthlyIncome"
                 type="number"
                 value={monthlyIncome}
                 onChange={(e) => setMonthlyIncome(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="1,50,000"
+                placeholder="Enter monthly income"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="monthlyExpenses" className="text-sm font-medium text-gray-700">
-                Monthly Expenses (₹)
+                Monthly Expenses (₹): {monthlyExpenses > 0 && numberToWords(monthlyExpenses)}
               </Label>
+              <Slider
+                value={[monthlyExpenses]}
+                onValueChange={(value) => setMonthlyExpenses(value[0])}
+                max={200000}
+                min={0}
+                step={1000}
+                className="w-full"
+              />
               <Input
                 id="monthlyExpenses"
                 type="number"
                 value={monthlyExpenses}
                 onChange={(e) => setMonthlyExpenses(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-red-500"
-                placeholder="50,000"
+                placeholder="Enter monthly expenses"
               />
               <p className="text-xs text-gray-500">
                 Living expenses, rent, utilities, etc.
@@ -118,15 +136,23 @@ const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAff
 
             <div className="space-y-2">
               <Label htmlFor="existingEmiAfford" className="text-sm font-medium text-gray-700">
-                Existing EMIs (₹)
+                Existing EMIs (₹): {existingEmi > 0 && numberToWords(existingEmi)}
               </Label>
+              <Slider
+                value={[existingEmi]}
+                onValueChange={(value) => setExistingEmi(value[0])}
+                max={50000}
+                min={0}
+                step={500}
+                className="w-full"
+              />
               <Input
                 id="existingEmiAfford"
                 type="number"
                 value={existingEmi}
                 onChange={(e) => setExistingEmi(Number(e.target.value))}
                 className="border-gray-300 focus:border-red-500"
-                placeholder="0"
+                placeholder="Enter existing EMI amount"
               />
               <p className="text-xs text-gray-500">
                 Car loan, personal loan, etc.
@@ -135,15 +161,23 @@ const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAff
 
             <div className="space-y-2">
               <Label htmlFor="downPaymentRatio" className="text-sm font-medium text-gray-700">
-                Down Payment (%)
+                Down Payment (%): {downPaymentRatio}%
               </Label>
+              <Slider
+                value={[downPaymentRatio]}
+                onValueChange={(value) => setDownPaymentRatio(value[0])}
+                max={50}
+                min={0}
+                step={1}
+                className="w-full"
+              />
               <Input
                 id="downPaymentRatio"
                 type="number"
                 value={downPaymentRatio}
                 onChange={(e) => setDownPaymentRatio(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-green-500"
-                placeholder="20"
+                placeholder="Enter down payment percentage"
               />
               <p className="text-xs text-gray-500">
                 Percentage of property value as down payment
@@ -152,8 +186,16 @@ const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAff
 
             <div className="space-y-2">
               <Label htmlFor="affordInterestRate" className="text-sm font-medium text-gray-700">
-                Interest Rate (% p.a.)
+                Interest Rate (% p.a.): {interestRate}%
               </Label>
+              <Slider
+                value={[interestRate]}
+                onValueChange={(value) => setInterestRate(value[0])}
+                max={18}
+                min={6}
+                step={0.1}
+                className="w-full"
+              />
               <Input
                 id="affordInterestRate"
                 type="number"
@@ -161,21 +203,29 @@ const AffordabilityCalculator: React.FC<AffordabilityCalculatorProps> = ({ onAff
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="8.5"
+                placeholder="Enter interest rate"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="affordTenure" className="text-sm font-medium text-gray-700">
-                Loan Tenure (Years)
+                Loan Tenure (Years): {tenure} years
               </Label>
+              <Slider
+                value={[tenure]}
+                onValueChange={(value) => setTenure(value[0])}
+                max={30}
+                min={5}
+                step={1}
+                className="w-full"
+              />
               <Input
                 id="affordTenure"
                 type="number"
                 value={tenure}
                 onChange={(e) => setTenure(Number(e.target.value))}
                 className="text-lg font-medium border-gray-300 focus:border-blue-500"
-                placeholder="20"
+                placeholder="Enter loan tenure"
               />
             </div>
 
