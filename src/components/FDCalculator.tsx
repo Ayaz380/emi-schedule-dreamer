@@ -10,9 +10,9 @@ import { PiggyBank, Calculator } from 'lucide-react';
 import { numberToWords } from '@/utils/numberToWords';
 
 const FDCalculator = () => {
-  const [principal, setPrincipal] = useState<number>(100000);
-  const [interestRate, setInterestRate] = useState<number>(7.5);
-  const [tenure, setTenure] = useState<number>(5);
+  const [principal, setPrincipal] = useState<number>(0);
+  const [interestRate, setInterestRate] = useState<number>(0);
+  const [tenure, setTenure] = useState<number>(0);
   const [compoundingFrequency, setCompoundingFrequency] = useState<string>('quarterly');
   const [results, setResults] = useState<any>(null);
 

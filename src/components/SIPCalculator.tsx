@@ -10,9 +10,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { numberToWords } from '@/utils/numberToWords';
 
 const SIPCalculator = () => {
-  const [monthlyInvestment, setMonthlyInvestment] = useState<number>(10000);
-  const [expectedReturn, setExpectedReturn] = useState<number>(12);
-  const [investmentPeriod, setInvestmentPeriod] = useState<number>(10);
+  const [monthlyInvestment, setMonthlyInvestment] = useState<number>(0);
+  const [expectedReturn, setExpectedReturn] = useState<number>(0);
+  const [investmentPeriod, setInvestmentPeriod] = useState<number>(0);
   const [results, setResults] = useState<any>(null);
 
   const calculateSIP = () => {

@@ -9,8 +9,8 @@ import { Shield, Calculator, TrendingUp } from 'lucide-react';
 import { numberToWords } from '@/utils/numberToWords';
 
 const PPFCalculator = () => {
-  const [yearlyInvestment, setYearlyInvestment] = useState<number>(150000);
-  const [currentAge, setCurrentAge] = useState<number>(30);
+  const [yearlyInvestment, setYearlyInvestment] = useState<number>(0);
+  const [currentAge, setCurrentAge] = useState<number>(0);
   const [results, setResults] = useState<any>(null);
 
   const calculatePPF = () => {

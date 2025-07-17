@@ -11,9 +11,9 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { numberToWords } from '@/utils/numberToWords';
 
 const TaxCalculator = () => {
-  const [annualIncome, setAnnualIncome] = useState<number>(1200000);
+  const [annualIncome, setAnnualIncome] = useState<number>(0);
   const [taxRegime, setTaxRegime] = useState<'old' | 'new'>('new');
-  const [deductions, setDeductions] = useState<number>(150000);
+  const [deductions, setDeductions] = useState<number>(0);
   const [results, setResults] = useState<any>(null);
 
   const calculateTax = () => {

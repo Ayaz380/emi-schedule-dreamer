@@ -12,15 +12,15 @@ import { numberToWords } from '@/utils/numberToWords';
 
 const InsuranceCalculator = () => {
   // Life Insurance State
-  const [age, setAge] = useState<number>(30);
-  const [annualIncome, setAnnualIncome] = useState<number>(1000000);
-  const [coverageMultiplier, setCoverageMultiplier] = useState<number>(10);
-  const [policyTerm, setPolicyTerm] = useState<number>(20);
+  const [age, setAge] = useState<number>(0);
+  const [annualIncome, setAnnualIncome] = useState<number>(0);
+  const [coverageMultiplier, setCoverageMultiplier] = useState<number>(0);
+  const [policyTerm, setPolicyTerm] = useState<number>(0);
   
   // Health Insurance State
-  const [healthAge, setHealthAge] = useState<number>(30);
-  const [familySize, setFamilySize] = useState<number>(4);
-  const [sumInsured, setSumInsured] = useState<number>(1000000);
+  const [healthAge, setHealthAge] = useState<number>(0);
+  const [familySize, setFamilySize] = useState<number>(0);
+  const [sumInsured, setSumInsured] = useState<number>(0);
   const [city, setCity] = useState<string>('metro');
   
   const [lifeResults, setLifeResults] = useState<any>(null);

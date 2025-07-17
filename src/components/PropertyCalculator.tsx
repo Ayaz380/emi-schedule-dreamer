@@ -4,22 +4,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Home, Calculator, TrendingUp } from 'lucide-react';
+import { numberToWords } from '@/utils/numberToWords';
 
 const PropertyCalculator = () => {
   // Rent vs Buy Calculator State
-  const [propertyPrice, setPropertyPrice] = useState<number>(5000000);
-  const [downPayment, setDownPayment] = useState<number>(20);
-  const [loanInterestRate, setLoanInterestRate] = useState<number>(8.5);
-  const [loanTenure, setLoanTenure] = useState<number>(20);
-  const [monthlyRent, setMonthlyRent] = useState<number>(25000);
-  const [rentIncrease, setRentIncrease] = useState<number>(5);
-  const [propertyAppreciation, setPropertyAppreciation] = useState<number>(6);
-  const [investmentReturn, setInvestmentReturn] = useState<number>(12);
+  const [propertyPrice, setPropertyPrice] = useState<number>(0);
+  const [downPayment, setDownPayment] = useState<number>(0);
+  const [loanInterestRate, setLoanInterestRate] = useState<number>(0);
+  const [loanTenure, setLoanTenure] = useState<number>(0);
+  const [monthlyRent, setMonthlyRent] = useState<number>(0);
+  const [rentIncrease, setRentIncrease] = useState<number>(0);
+  const [propertyAppreciation, setPropertyAppreciation] = useState<number>(0);
+  const [investmentReturn, setInvestmentReturn] = useState<number>(0);
   
   // Stamp Duty Calculator State
-  const [stampDutyPropertyValue, setStampDutyPropertyValue] = useState<number>(5000000);
+  const [stampDutyPropertyValue, setStampDutyPropertyValue] = useState<number>(0);
   const [selectedState, setSelectedState] = useState<string>('maharashtra');
   
   const [results, setResults] = useState<any>(null);
@@ -136,71 +138,149 @@ const PropertyCalculator = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="propertyPrice">Property Price (₹)</Label>
-                      <Input
-                        id="propertyPrice"
-                        type="number"
-                        value={propertyPrice}
-                        onChange={(e) => setPropertyPrice(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="propertyPrice">Property Price (₹50L - ₹5Cr)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[propertyPrice]}
+                          onValueChange={(value) => setPropertyPrice(value[0])}
+                          min={5000000}
+                          max={50000000}
+                          step={100000}
+                          className="w-full"
+                        />
+                        <Input
+                          id="propertyPrice"
+                          type="number"
+                          value={propertyPrice}
+                          onChange={(e) => setPropertyPrice(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={5000000}
+                          max={50000000}
+                        />
+                        <p className="text-xs text-gray-500">
+                          {numberToWords(propertyPrice)} Rupees
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="downPayment">Down Payment (%)</Label>
-                      <Input
-                        id="downPayment"
-                        type="number"
-                        value={downPayment}
-                        onChange={(e) => setDownPayment(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="downPayment">Down Payment (10% - 50%)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[downPayment]}
+                          onValueChange={(value) => setDownPayment(value[0])}
+                          min={10}
+                          max={50}
+                          step={5}
+                          className="w-full"
+                        />
+                        <Input
+                          id="downPayment"
+                          type="number"
+                          value={downPayment}
+                          onChange={(e) => setDownPayment(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={10}
+                          max={50}
+                        />
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="monthlyRent">Monthly Rent (₹)</Label>
-                      <Input
-                        id="monthlyRent"
-                        type="number"
-                        value={monthlyRent}
-                        onChange={(e) => setMonthlyRent(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="monthlyRent">Monthly Rent (₹10K - ₹2L)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[monthlyRent]}
+                          onValueChange={(value) => setMonthlyRent(value[0])}
+                          min={10000}
+                          max={200000}
+                          step={5000}
+                          className="w-full"
+                        />
+                        <Input
+                          id="monthlyRent"
+                          type="number"
+                          value={monthlyRent}
+                          onChange={(e) => setMonthlyRent(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={10000}
+                          max={200000}
+                        />
+                        <p className="text-xs text-gray-500">
+                          {numberToWords(monthlyRent)} Rupees
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="loanInterestRate">Loan Interest Rate (%)</Label>
-                      <Input
-                        id="loanInterestRate"
-                        type="number"
-                        step="0.1"
-                        value={loanInterestRate}
-                        onChange={(e) => setLoanInterestRate(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="loanInterestRate">Loan Interest Rate (6% - 15%)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[loanInterestRate]}
+                          onValueChange={(value) => setLoanInterestRate(value[0])}
+                          min={6}
+                          max={15}
+                          step={0.1}
+                          className="w-full"
+                        />
+                        <Input
+                          id="loanInterestRate"
+                          type="number"
+                          step="0.1"
+                          value={loanInterestRate}
+                          onChange={(e) => setLoanInterestRate(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={6}
+                          max={15}
+                        />
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="rentIncrease">Annual Rent Increase (%)</Label>
-                      <Input
-                        id="rentIncrease"
-                        type="number"
-                        value={rentIncrease}
-                        onChange={(e) => setRentIncrease(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="rentIncrease">Annual Rent Increase (3% - 15%)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[rentIncrease]}
+                          onValueChange={(value) => setRentIncrease(value[0])}
+                          min={3}
+                          max={15}
+                          step={1}
+                          className="w-full"
+                        />
+                        <Input
+                          id="rentIncrease"
+                          type="number"
+                          value={rentIncrease}
+                          onChange={(e) => setRentIncrease(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={3}
+                          max={15}
+                        />
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="propertyAppreciation">Property Appreciation (%)</Label>
-                      <Input
-                        id="propertyAppreciation"
-                        type="number"
-                        value={propertyAppreciation}
-                        onChange={(e) => setPropertyAppreciation(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="propertyAppreciation">Property Appreciation (3% - 12%)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[propertyAppreciation]}
+                          onValueChange={(value) => setPropertyAppreciation(value[0])}
+                          min={3}
+                          max={12}
+                          step={1}
+                          className="w-full"
+                        />
+                        <Input
+                          id="propertyAppreciation"
+                          type="number"
+                          value={propertyAppreciation}
+                          onChange={(e) => setPropertyAppreciation(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={3}
+                          max={12}
+                        />
+                      </div>
                     </div>
 
                     <Button 
@@ -314,15 +394,30 @@ const PropertyCalculator = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="stampDutyPropertyValue">Property Value (₹)</Label>
-                      <Input
-                        id="stampDutyPropertyValue"
-                        type="number"
-                        value={stampDutyPropertyValue}
-                        onChange={(e) => setStampDutyPropertyValue(Number(e.target.value))}
-                        className="text-lg font-medium"
-                      />
+                    <div className="space-y-3">
+                      <Label htmlFor="stampDutyPropertyValue">Property Value (₹50L - ₹5Cr)</Label>
+                      <div className="space-y-2">
+                        <Slider
+                          value={[stampDutyPropertyValue]}
+                          onValueChange={(value) => setStampDutyPropertyValue(value[0])}
+                          min={5000000}
+                          max={50000000}
+                          step={100000}
+                          className="w-full"
+                        />
+                        <Input
+                          id="stampDutyPropertyValue"
+                          type="number"
+                          value={stampDutyPropertyValue}
+                          onChange={(e) => setStampDutyPropertyValue(Number(e.target.value))}
+                          className="text-lg font-medium"
+                          min={5000000}
+                          max={50000000}
+                        />
+                        <p className="text-xs text-gray-500">
+                          {numberToWords(stampDutyPropertyValue)} Rupees
+                        </p>
+                      </div>
                     </div>
 
                     <div className="space-y-2">
